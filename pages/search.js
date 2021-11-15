@@ -8,7 +8,7 @@ const Search = () => {
     <Wrapper>
       {/* Button container */}
       <ButtonContainer>
-        <Link href="/">
+        <Link passHref href="/">
           <BackButton src="https://img.icons8.com/ios-filled/50/000000/left.png" />
         </Link>
       </ButtonContainer>
@@ -33,7 +33,18 @@ const Search = () => {
       </SavedPlacesContainer>
       {/* Confirm location */}
       <ConfirmLocationContainer>
-        <ConfirmLocationButton>Confirm location</ConfirmLocationButton>
+        <Link
+          passHref
+          href={{
+            pathname: "/confirm",
+            query: {
+              pickup: "",
+              dropoff: "",
+            },
+          }}
+        >
+          <ConfirmLocationButton>Confirm location</ConfirmLocationButton>
+        </Link>
       </ConfirmLocationContainer>
     </Wrapper>
   );
@@ -102,5 +113,5 @@ const ConfirmLocationContainer = tw.div`
 
 const ConfirmLocationButton = tw.button`
     bg-black text-white p-2 flex-1 
-    rounded-2 text-lg
+    rounded-2 text-2xl
 `;
