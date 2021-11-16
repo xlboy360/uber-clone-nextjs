@@ -3,13 +3,15 @@ import { useEffect, useState } from "react";
 import Map from "./components/Map";
 import tw from "tailwind-styled-components";
 import { useRouter } from "next/router";
+import RideSelector from "./components/RideSelector";
+import Link from "next/link";
 
 const Confirm = () => {
   const router = useRouter();
   const { pickup, dropoff } = router.query;
 
-  const [pickUpCoordinates, setPickUpCoordinates] = useState();
-  const [dropOffCoordinates, setDropOffCoordinates] = useState();
+  const [pickUpCoordinates, setPickUpCoordinates] = useState([0, 0]);
+  const [dropOffCoordinates, setDropOffCoordinates] = useState([0, 0]);
 
   const getPickUpCoordinates = (pickup) => {
     fetch(
@@ -48,14 +50,21 @@ const Confirm = () => {
 
   return (
     <Wrapper>
+      <ReturnButtonContainer>
+        <BackButton src="https://img.icons8.com/ios-filled/50/000000/left.png" />
+      </ReturnButtonContainer>
       <Map
         pickUpCoordinates={pickUpCoordinates}
         dropOffCoordinates={dropOffCoordinates}
       />
       <RideContainer>
-        <RideSelector></RideSelector>
-        <ConfirmButtonContainer></ConfirmButtonContainer>
-        Ride selectors confirm button
+        <RideSelector
+          pickUpCoordinates={pickUpCoordinates}
+          dropOffCoordinates={dropOffCoordinates}
+        />
+        <ConfirmButtonContainer>
+          <ConfirmButton>Confirm button</ConfirmButton>
+        </ConfirmButtonContainer>
       </RideContainer>
     </Wrapper>
   );
@@ -68,9 +77,29 @@ const Wrapper = tw.div`
 `;
 
 const RideContainer = tw.div`
-    flex-1 
+    flex flex-1 flex-col
+    h-1/2
 `;
 
-const RideSelector = tw.div``;
+const ConfirmButtonContainer = tw.div`
+  border-t-2
+`;
 
-const ConfirmButtonContainer = tw.div``;
+const ConfirmButton = tw.div`
+  bg-black text-white m-4
+  py-4 text-center text-xl
+  cursor-pointer
+`;
+
+const ReturnButtonContainer = tw.div`
+  bg-transparent p-1
+`;
+
+const BackButton = tw.img`
+  h-10 w-10
+  p-px
+  bg-gray-200
+  rounded-full
+  border border-white
+  cursor-pointer
+`;
