@@ -1,11 +1,30 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import tw from "tailwind-styled-components";
 
 import Map from "./components/map";
 import Link from "next/link";
 
+import { auth } from "../firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import router, { useRouter } from "next/router";
+
 export default function Home() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser({
+          name: user.displayName,
+          photoUrl: user.photoURL,
+        });
+      } else {
+        setUser(null);
+        router.push("/login");
+      }
+    });
+  }, []);
   return (
     <Wrapper>
       <Map />
@@ -13,8 +32,8 @@ export default function Home() {
         <Header>
           <UberLogo src="https://i.ibb.co/84stgjq/uber-technologies-new-20218114.jpg" />
           <ProfileContainer>
-            <Name>Juan Salgado</Name>
-            <UserImg src="https://lh3.googleusercontent.com/ogw/ADea4I7wjvD_0dOERKYzCri4yzj_btWkAYnemxBXLDDW=s32-c-mo" />
+            <Name>{user && user.name}</Name>
+            <UserImg src={user && user.photoUrl} onClick={() => signOut(auth)} />
           </ProfileContainer>
         </Header>
         <ActionButtonsContainer>
@@ -64,6 +83,7 @@ const Name = tw.div`
 
 const UserImg = tw.img`
   h-12 w-12 rounded-full border border-gray-200 p-px
+  cursor-pointer
 `;
 
 const ActionButtonsContainer = tw.div`
