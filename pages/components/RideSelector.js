@@ -13,7 +13,8 @@ const RideSelector = ({ pickUpCoordinates, dropOffCoordinates }) => {
         ?access_token=pk.eyJ1IjoiamVhbmMyMDIxIiwiYSI6ImNrdnF3bzRzZjRhcGYydG51c2J2Yzl4MHcifQ.dzkZo35-aV5QIHbeOOy-nw`)
       .then((res) => res.json())
       .then((data) => {
-        setRideDuration(data.routes[0].duration / 100);
+        if(data.routes)
+          setRideDuration(data.routes[0].duration / 100);
       });
   }, [pickUpCoordinates, dropOffCoordinates]);
   console.log(pickUpCoordinates, dropOffCoordinates);
@@ -27,7 +28,7 @@ const RideSelector = ({ pickUpCoordinates, dropOffCoordinates }) => {
             <CarImage src={car.imgUrl} />
             <CarDetails>
               <Service>{car.service}</Service>
-              <Time>5 min away</Time>
+              <Time>{(rideDuration).toFixed(1)} min away</Time>
             </CarDetails>
             <CarPrice>${(rideDuration * car.multiplier).toFixed(2)}</CarPrice>
           </Car>
