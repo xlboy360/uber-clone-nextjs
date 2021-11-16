@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 
 import Map from "./components/Map";
 import tw from "tailwind-styled-components";
+import { useRouter } from "next/router";
 
 const Confirm = () => {
+  const router = useRouter();
+  const { pickup, dropoff } = router.query;
+
   const [pickUpCoordinates, setPickUpCoordinates] = useState();
   const [dropOffCoordinates, setDropOffCoordinates] = useState();
 
-  const getPickUpCoordinates = () => {
-    const pickup = "Jesús Garibay 59";
+  const getPickUpCoordinates = (pickup) => {
     fetch(
       `https://api.mapbox.com/geocoding/v5/mapbox.places/${pickup}.json?` +
         new URLSearchParams({
@@ -23,8 +26,7 @@ const Confirm = () => {
       });
   };
 
-  const getDropUpCoordinates = () => {
-    const dropoff = "Metro Constitución 1917";
+  const getDropUpCoordinates = (dropoff) => {
     fetch(
       `https://api.mapbox.com/geocoding/v5/mapbox.places/${dropoff}.json?` +
         new URLSearchParams({
@@ -40,9 +42,9 @@ const Confirm = () => {
   };
 
   useEffect(() => {
-    getPickUpCoordinates();
-    getDropUpCoordinates();
-  }, []);
+    getPickUpCoordinates(pickup);
+    getDropUpCoordinates(dropoff);
+  }, [pickup, dropoff]);
 
   return (
     <Wrapper>
@@ -51,6 +53,8 @@ const Confirm = () => {
         dropOffCoordinates={dropOffCoordinates}
       />
       <RideContainer>
+        <RideSelector></RideSelector>
+        <ConfirmButtonContainer></ConfirmButtonContainer>
         Ride selectors confirm button
       </RideContainer>
     </Wrapper>
@@ -66,3 +70,7 @@ const Wrapper = tw.div`
 const RideContainer = tw.div`
     flex-1 
 `;
+
+const RideSelector = tw.div``;
+
+const ConfirmButtonContainer = tw.div``;
